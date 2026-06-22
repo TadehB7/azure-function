@@ -51,17 +51,17 @@ jobs:
           app-settings-json: |
             [
               {
-                "name": "EmailUser",
+                "name": "Email_User",
                 "value": "${{ secrets.EMAIL_USER }}",
                 "slotSetting": false
               },
               {
-                "name": "EmailPassword",
+                "name": "Email_Password",
                 "value": "${{ secrets.EMAIL_PASSWORD }}",
                 "slotSetting": false
               },
               {
-                "name": "RecipientEmail",
+                "name": "Recipient_Email",
                 "value": "${{ secrets.RECIPIENT_EMAIL }}",
                 "slotSetting": false
               },
