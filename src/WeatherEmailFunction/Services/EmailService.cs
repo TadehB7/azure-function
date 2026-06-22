@@ -7,9 +7,9 @@ public class EmailService
 {
     public async Task SendAsync(string body)
     {
-        var from = Environment.GetEnvironmentVariable("EmailUser");
-        var password = Environment.GetEnvironmentVariable("EmailPassword");
-        var to = Environment.GetEnvironmentVariable("RecipientEmail");
+        var from = Environment.GetEnvironmentVariable("Email_User");
+        var password = Environment.GetEnvironmentVariable("Email_Password");
+        var to = Environment.GetEnvironmentVariable("Recipient_Email");
 
         if (string.IsNullOrWhiteSpace(from))
             throw new InvalidOperationException("Missing EmailUser setting.");

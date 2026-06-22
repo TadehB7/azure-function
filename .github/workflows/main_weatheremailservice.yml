@@ -69,11 +69,6 @@ jobs:
                 "name": "WeatherCronExpression",
                 "value": "0 */5 * * * *",
                 "slotSetting": false
-              },
-              {
-                "name": "FUNCTIONS_WORKER_RUNTIME",
-                "value": "dotnet-isolated",
-                "slotSetting": false
               }
             ]
 
