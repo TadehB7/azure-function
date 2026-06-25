@@ -1,8 +1,10 @@
-using Microsoft.Azure.Functions.Worker;
+using Amazon.Lambda.Core;
 using Microsoft.Extensions.Logging;
 using WeatherEmailFunction.Services;
+[assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
 namespace WeatherEmailFunction;
+
 
 public class WeatherFunction
 {
@@ -20,8 +22,7 @@ public class WeatherFunction
         _logger = logger;
     }
 
-    [Function("WeatherFunction")]
-    public async Task Run([TimerTrigger("%WeatherCronExpression%")] TimerInfo timer)
+    public async Task FunctionHandler(object input, ILambdaContext context)
     {
         _logger.LogInformation("Timer triggered");
 
