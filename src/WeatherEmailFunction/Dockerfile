@@ -16,14 +16,14 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # Copy project files
-COPY ["./src/WeatherEmailFunction/WeatherEmailFunction.csproj", "WeatherEmailFunction/"]
+COPY ["./WeatherEmailFunction.csproj", "WeatherEmailFunction/"]
 
 # Restore dependencies
-RUN dotnet restore "WeatherEmailFunction/WeatherEmailFunction.csproj"
+RUN dotnet restore "WeatherEmailFunction.csproj"
 
 # Copy all source code
-COPY ./src .
-WORKDIR "/src/WeatherEmailFunction"
+COPY . .
+WORKDIR "WeatherEmailFunction"
 
 # Build the application
 RUN dotnet build "./WeatherEmailFunction.csproj" -c $BUILD_CONFIGURATION -o /app/build
