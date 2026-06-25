@@ -6,16 +6,16 @@ using WeatherEmailFunction.Services;
 namespace WeatherEmailFunction;
 
 
-public class WeatherFunction
+public class Function
 {
     private readonly WeatherService _weatherService;
     private readonly EmailService _emailService;
-    private readonly ILogger<WeatherFunction> _logger;
+    private readonly ILogger<Function> _logger;
 
-    public WeatherFunction(
+    public Function(
         WeatherService weatherService,
         EmailService emailService,
-        ILogger<WeatherFunction> logger)
+        ILogger<Function> logger)
     {
         _weatherService = weatherService;
         _emailService = emailService;

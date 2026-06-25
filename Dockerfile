@@ -1,47 +1,22 @@
-# Dockerfile
-
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
-WORKDIR /app
-
-EXPOSE 8080
-EXPOSE 8081
-
-# Set environment WeatherEmailFunction
-ENV ASPNETCORE_URLS=http://+:8080
-ENV ASPNETCORE_ENVIRONMENT=Production
-
+FROM public.ecr.aws/lambda/dotnet:10 AS base
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# Copy project files
-COPY ["./src/WeatherEmailFunction.csproj", "WeatherEmailFunction/"]
-
-# Restore dependencies
+COPY ["src/WeatherEmailFunction.csproj", "WeatherEmailFunction/"]
 RUN dotnet restore "WeatherEmailFunction/WeatherEmailFunction.csproj"
 
-# Copy all source code
-COPY ./src .
-WORKDIR "WeatherEmailFunction"
+COPY src/ WeatherEmailFunction/
+WORKDIR /src/WeatherEmailFunction
 
-# Build the application
-RUN dotnet build "./WeatherEmailFunction.csproj" -c $BUILD_CONFIGURATION -o /app/build
-
-
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./WeatherEmailFunction.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
-
+RUN dotnet publish "WeatherEmailFunction.csproj" \
+    -c Release \
+    -o /app/publish \
+    /p:UseAppHost=false
 
 FROM base AS final
-WORKDIR /app
+WORKDIR /var/task
 
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 
-# Create a non-root user (Debian/Ubuntu style)
-RUN useradd -m appuser && chown -R appuser /app
-
-USER appuser
-
-ENTRYPOINT ["dotnet", "WeatherEmailFunction.dll"]
+CMD ["WeatherEmailFunction::WeatherEmailFunction.Function::FunctionHandler"]
