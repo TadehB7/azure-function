@@ -1,19 +1,18 @@
-using Azure.Monitor.OpenTelemetry.Exporter;
-using Microsoft.Azure.Functions.Worker.Builder;
-using Microsoft.Azure.Functions.Worker.OpenTelemetry;
+using Amazon.Lambda.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using WeatherEmailFunction.Services;
 
-var builder = FunctionsApplication.CreateBuilder(args);
+[assembly: LambdaGlobalProperties(GenerateMain = true)]
 
-builder.ConfigureFunctionsWebApplication();
+namespace WeatherEmailFunction;
 
-builder.Services.AddHttpClient<WeatherService>();
-builder.Services.AddSingleton<EmailService>();
-
-
-builder.Services.AddOpenTelemetry()
-    .UseFunctionsWorkerDefaults();
-
-builder.Build().Run();
+[LambdaStartup]
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddLogging();
+        services.AddHttpClient<WeatherService>();
+        services.AddSingleton<EmailService>();
+    }
+}

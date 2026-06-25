@@ -1,3 +1,4 @@
+using Amazon.Lambda.Annotations;
 using Amazon.Lambda.Core;
 using Microsoft.Extensions.Logging;
 using WeatherEmailFunction.Services;
@@ -22,6 +23,7 @@ public class Function
         _logger = logger;
     }
 
+    [LambdaFunction]
     public async Task FunctionHandler(object input, ILambdaContext context)
     {
         _logger.LogInformation("Timer triggered");
