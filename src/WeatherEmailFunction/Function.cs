@@ -1,5 +1,6 @@
 using Amazon.Lambda.Annotations;
 using Amazon.Lambda.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WeatherEmailFunction.Services;
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
@@ -12,6 +13,21 @@ public class Function
     private readonly WeatherService _weatherService;
     private readonly EmailService _emailService;
     private readonly ILogger<Function> _logger;
+
+    public Function()
+    {
+        var services = new ServiceCollection();
+
+        services.AddLogging();
+        services.AddHttpClient<WeatherService>();
+        services.AddSingleton<EmailService>();
+
+        var serviceProvider = services.BuildServiceProvider();
+
+        _weatherService = serviceProvider.GetRequiredService<WeatherService>();
+        _emailService = serviceProvider.GetRequiredService<EmailService>();
+        _logger = serviceProvider.GetRequiredService<ILogger<Function>>();
+    }
 
     public Function(
         WeatherService weatherService,
